@@ -44,7 +44,7 @@ li a:hover:not(.active) {
   background-color: #226d99;
 }
 td{
-	text-align:left;
+  text-align:left;
 }
 body{
   background: #ecf0f5;
@@ -60,7 +60,7 @@ body{
   <!--<li><a href="Userprofile.php">User Profile</a></li>-->
     <!--<li><a href="add_bank.php">Add Bank</a></li>-->
     <li><a href="Trans.php">Today Transaction</a></li>
-	<li><a href="kitret.php">Close Acc</a></li>
+  <li><a href="kitret.php">Close Acc</a></li>
   <li style="float: right;margin-right: 30px;">
       <form method="post" action="search_user.php">
         <input type="search" name="search" placeholder=" Search Client Here..." style="margin-top: 12px;">
@@ -85,11 +85,11 @@ body{
             <center>
             <table width="20%"><tr>
                 <td>
-			   <select name="sort" class="form-control" style="padding:8px;" required>
+         <select name="sort" class="form-control" style="padding:8px;" required>
 <?php
 if(isset($_POST['btn'])){
-	$sort = $_POST['sort'];
-	//echo $sort;
+  $sort = $_POST['sort'];
+  //echo $sort;
 }
 if($sort != ''){
 ?>
@@ -116,28 +116,28 @@ if($sort != ''){
             <th>S.no</th>
             <th>Account Holder</th>
             <th>Father</th>
-			<th>Relation</th>
+      <th>Relation</th>
             <th>Customer Id</th>
-			<th>Account No.</th>
-			<th>Bank</th>
+      <th>Account No.</th>
+      <th>Bank</th>
             <th>Balance</th>
-			
+      <th>Tag</th>
 
-			
+      
         </tr>
     
 <?php
 //$id= '';
 include 'connection.php';
 if(isset($_POST['btn'])){
-	$sort = $_POST['sort'];
-	//echo $sort;
+  $sort = $_POST['sort'];
+  //echo $sort;
 }
-	if($sort == 'Ascending'){
-		$sql2 = "SELECT * FROM `tbl_addbank` ORDER BY balance ASC";
-	}else{
-		$sql2 = "SELECT * FROM `tbl_addbank` ORDER BY balance DESC";
-	}
+  if($sort == 'Ascending'){
+    $sql2 = "SELECT * FROM `tbl_addbank` ORDER BY CAST(`balance` AS DECIMAL) ASC";
+  }else{
+    $sql2 = "SELECT * FROM `tbl_addbank` ORDER BY CAST(`balance` AS DECIMAL) DESC";
+  }
 //echo $sql2;
 $result2 = $conn->query($sql2);
 $count = mysqli_num_rows($result2);
@@ -145,46 +145,70 @@ $count = mysqli_num_rows($result2);
 if($count > 0){
 $x=1;
 while($row2 = $result2->fetch_assoc()){
-	
-	$an = $row2['accholdername'];
-	$fn = $row2['fathername'];
-	$r  = $row2['relation'];
-	$ci = $row2['customerid'];
-	$bn = $row2['bankaccnum'];
-	$ba = $row2['bankname'];
-	$bl = $row2['balance'];
-	$pass = $row2['password'];
-?>			
+  
+  $an = $row2['accholdername'];
+  $fn = $row2['fathername'];
+  $r  = $row2['relation'];
+  $ci = $row2['customerid'];
+  $bn = $row2['bankaccnum'];
+  $ba = $row2['bankname'];
+  $bl = $row2['balance'];
+  $pass = $row2['password'];
+  $tg = $row2['tag'];
+?>      
         <tr>
             <td><?php echo $x++; ?></td>
             <td><?php echo $an; ?></td>
             <td><?php echo $fn; ?></td>
-			<td><?php echo $r;  ?></td>
+      <td><?php echo $r;  ?></td>
             <td title="<?php echo $pass; ?>"><?php echo $ci; ?></td>
-		    <td><?php echo $bn; ?></td>
-		    <td><?php echo $ba; ?></td>
-		    <td>₹<?php echo $bl; ?></td>
-			
+        <td><?php echo $bn; ?></td>
+        <td><?php echo $ba; ?></td>
+        <td>₹<?php echo $bl; ?></td>
+        <td>
+      <?php
+      //echo $tg; 
+      if($tg != ''){
+      include 'connection.php';
+      $sql23 = "SELECT * FROM `tbl_tag` where id='$tg'";
+      $result23 = $conn->query($sql23);
+      while($row23 = $result23->fetch_assoc()){
+        $tn = $row23['tag_name'];
+      }
+      ?>
+      <i class="fa fa-tag" aria-hidden="true" style="color:red;"></i>
+      <?php
+      echo $tn;
+      }
+      ?></td>
+      
+      
 
         </tr>
 <?php }}else{ ?>
 
-		<tr>
-			<td colspan="8" style="color:red;">
-				Please Add Accounts !!!
-			</td>
-		</tr>
+    <tr>
+      <td colspan="8" style="color:red;">
+        Please Add Accounts !!!
+      </td>
+    </tr>
 
-<?php } ?>		
+<?php } ?>    
   
-	
-			</table>
+  
+      </table>
  
             </div>
             </div>
             </div>
           </body>
 </html>
+
+
+
+
+
+
 
 
 
